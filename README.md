@@ -19,10 +19,10 @@ REPLICATE_API_TOKEN=your_replicate_token_here
 
 ## 📁 Scripts Description
 
-### `config.py`
+### `src/config.py`
 Configuration file that loads environment variables from `.env` using `python-dotenv`. Provides a `set_environment()` function to expose all uppercase variables as environment variables.
 
-### `chat.py`
+### `src/chat/chat.py`
 **Purpose:** Test LangChain with Google Gemini for conversational AI with chaining.
 
 **Features:**
@@ -39,7 +39,7 @@ Configuration file that loads environment variables from `.env` using `python-do
 
 **Use case:** Generate a joke and then analyze why it's funny using two sequential LLM calls.
 
-### `explain_concept.py`
+### `src/explain_concept/explain_concept.py`
 **Purpose:** Test LangChain with Ollama (local LLM) for concept explanation.
 
 **Features:**
@@ -55,7 +55,7 @@ Configuration file that loads environment variables from `.env` using `python-do
 
 **Use case:** Explain quantum computing in simple terms using a local LLM with robust error handling.
 
-### `generate_image.py`
+### `src/generate_image/generate_image.py`
 **Purpose:** Test LangChain for image generation using Replicate API.
 
 **Features:**
@@ -71,7 +71,7 @@ Configuration file that loads environment variables from `.env` using `python-do
 
 **Use case:** Generate a surreal image of "upside-down houses on a street" using AI image generation through a LangChain chain.
 
-### `list_models.py`
+### `src/list_models.py`
 **Purpose:** Utility script to list all available Gemini models.
 
 **Features:**
@@ -121,20 +121,19 @@ START → analyze_sentiment → [conditional by sentiment]
 source .venv/bin/activate
 
 # Run conversational AI with chaining examples
-python chat.py
+python src/chat/chat.py
 
 # Run concept explanation with Ollama
-python explain_concept.py
+python src/explain_concept/explain_concept.py
 
 # Run image generation (requires Replicate API token)
-python generate_image.py
+python src/generate_image/generate_image.py
 
 # List available Gemini models
-python list_models.py
+python src/list_models.py
 
 # Run LangGraph StateGraph example with conditionals and reducers
-cd src/langGraph
-python langGraph.py
+python src/langGraph/langGraph.py
 ```
 
 ## 🧪 Key LangChain Concepts Tested
@@ -184,9 +183,9 @@ sudo dnf install graphviz graphviz-devel
 
 ## 📝 Notes
 
-- `chat.py` requires internet connection and Gemini API access
-- `explain_concept.py` requires Ollama running locally (`ollama serve`)
-- `generate_image.py` requires Replicate API token with credits
+- `src/chat/chat.py` requires internet connection and Gemini API access
+- `src/explain_concept/explain_concept.py` requires Ollama running locally (`ollama serve`)
+- `src/generate_image/generate_image.py` requires Replicate API token with credits
 - All scripts implement proper error handling and informative messages
 
 ## 🎯 Learning Objectives
