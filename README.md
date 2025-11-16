@@ -81,6 +81,39 @@ Configuration file that loads environment variables from `.env` using `python-do
 
 **Use case:** Discover which Gemini models are available with your API key.
 
+### `src/langGraph/langGraph.py`
+**Purpose:** Test LangGraph's StateGraph API with conditional routing and reducers.
+
+**Features:**
+- **StateGraph**: Build complex workflow graphs with nodes and edges
+- **Conditional edges**: Dynamic routing based on sentiment analysis
+- **Reducers**: State accumulation patterns
+  - `Annotated[list, add]`: Concatenate lists for history tracking
+  - Custom `increment_counter`: Always increment by 1
+- **State management**: TypedDict with typed state structure
+- **Graph visualization**: Export graph structure to PNG using Mermaid
+- Multi-path routing based on sentiment (positive/negative/neutral)
+- Loop control with iteration limits
+- Comprehensive state tracking:
+  - Current values (sentiment, response)
+  - Accumulated history (sentiment_history, response_history)
+  - Iteration counter
+
+**Graph Structure:**
+```
+START → analyze_sentiment → [conditional by sentiment]
+         ↓                 ↓                 ↓
+   handle_positive  handle_negative  handle_neutral
+         ↓                 ↓                 ↓
+         └─────────→ check_followup ←───────┘
+                          ↓
+                [conditional by iteration]
+                    ↓         ↓
+                  END    reanalyze (loop)
+```
+
+**Use case:** Demonstrate sentiment analysis workflow with multiple paths and state accumulation using reducers.
+
 ## 🚀 Running the Scripts
 
 ```bash
@@ -98,10 +131,15 @@ python generate_image.py
 
 # List available Gemini models
 python list_models.py
+
+# Run LangGraph StateGraph example with conditionals and reducers
+cd src/langGraph
+python langGraph.py
 ```
 
 ## 🧪 Key LangChain Concepts Tested
 
+### Core LangChain
 - **PromptTemplate**: Reusable prompt structures with variables
 - **LCEL (LangChain Expression Language)**: Chain composition with `|` operator
 - **RunnablePassthrough**: Pass and enrich data through chains
@@ -111,10 +149,31 @@ python list_models.py
 - **Error Handling**: Centralized error management patterns
 - **Multi-provider Support**: Gemini, Ollama, Replicate integration
 
+### LangGraph
+- **StateGraph**: Build complex workflow graphs with conditional logic
+- **Reducers**: State accumulation with `Annotated[type, reducer]`
+  - `operator.add`: Concatenate lists/strings, sum numbers
+  - Custom reducers: Define your own merge logic
+- **Conditional Edges**: Dynamic routing based on state
+- **Graph Visualization**: Export to PNG/Mermaid diagrams
+- **Stateful Workflows**: TypedDict state management across nodes
+
 ## 📦 Dependencies
 
 ```bash
-pip install langchain langchain-core langchain-google-genai langchain-ollama python-dotenv google-generativeai replicate requests
+pip install langchain langchain-core langchain-google-genai langchain-ollama langgraph python-dotenv google-generativeai replicate requests pygraphviz
+```
+
+**Note:** `pygraphviz` requires system-level graphviz installation:
+```bash
+# Ubuntu/Debian
+sudo apt-get install graphviz graphviz-dev
+
+# macOS
+brew install graphviz
+
+# Fedora
+sudo dnf install graphviz graphviz-devel
 ```
 
 ## 🔒 Security
@@ -134,8 +193,12 @@ pip install langchain langchain-core langchain-google-genai langchain-ollama pyt
 
 This repository demonstrates:
 1. How to build LangChain chains with LCEL
-2. How to integrate multiple LLM providers
+2. How to integrate multiple LLM providers (Gemini, Ollama, Replicate)
 3. How to handle errors gracefully in production scenarios
 4. How to create reusable prompt templates
 5. How to chain multiple LLM calls for complex workflows
 6. How to extend LangChain with custom components (image generation)
+7. **How to build stateful workflows with LangGraph**
+8. **How to use reducers for state accumulation**
+9. **How to implement conditional routing in graphs**
+10. **How to visualize and debug complex workflows**
