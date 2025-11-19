@@ -114,6 +114,32 @@ START → analyze_sentiment → [conditional by sentiment]
 
 **Use case:** Demonstrate sentiment analysis workflow with multiple paths and state accumulation using reducers.
 
+### `src/output_parser/output_parser.py`
+**Purpose:** Test LangChain output parsers with structured responses using LCEL and LangGraph.
+
+**Features:**
+- **PydanticOutputParser**: Parse LLM responses into structured Pydantic models
+- **YesNoEnum**: Custom enum for binary Yes/No responses
+- **Pydantic validation**: Automatic validation and type conversion with `@field_validator`
+- **LCEL chain**: `prompt | llm | parser` for structured output parsing
+- **LangGraph conditional routing**: Different actions based on parsed Yes/No response
+- **Graph visualization**: Export workflow to PNG
+- Robust parsing with multiple variations ("yes", "y", "true", "no", "n", "false")
+- Error handling with default fallback to NO
+
+**Graph Structure:**
+```
+START → ask_question → [conditional by YES/NO]
+              ↓                    ↓
+      action_positive      action_negative
+              ↓                    ↓
+              └──→ finalize ←──────┘
+                      ↓
+                    END
+```
+
+**Use case:** Ask Gemini yes/no questions, parse structured responses with PydanticOutputParser, and execute different actions based on the parsed enum value.
+
 ## 🚀 Running the Scripts
 
 ```bash
@@ -134,6 +160,9 @@ python src/list_models.py
 
 # Run LangGraph StateGraph example with conditionals and reducers
 python src/langGraph/langGraph.py
+
+# Run output parser example with PydanticOutputParser
+python src/output_parser/output_parser.py
 ```
 
 ## 🧪 Key LangChain Concepts Tested
@@ -145,6 +174,9 @@ python src/langGraph/langGraph.py
 - **itemgetter**: Extract specific values from dictionaries
 - **RunnableLambda**: Custom chain components
 - **Output Parsers**: Extract structured data from LLM responses
+  - **PydanticOutputParser**: Parse to Pydantic models with validation
+  - **StrOutputParser**: Extract plain text
+  - Structured output with enums and custom validation
 - **Error Handling**: Centralized error management patterns
 - **Multi-provider Support**: Gemini, Ollama, Replicate integration
 
@@ -201,3 +233,5 @@ This repository demonstrates:
 8. **How to use reducers for state accumulation**
 9. **How to implement conditional routing in graphs**
 10. **How to visualize and debug complex workflows**
+11. **How to parse structured outputs with PydanticOutputParser**
+12. **How to validate LLM responses with Pydantic models and enums**
